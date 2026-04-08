@@ -1,0 +1,26 @@
+:root {
+  /* Backgrounds */
+  --bg-main: #0F172A;
+  --bg-card: #1E293B;
+
+  /* Primary Actions */
+  --action-primary: #3B82F6;
+  --accent-glow: #06B6D4;
+
+  /* Audit Status Colors (Stoplight Psychology) */
+  --status-success: #10B981; /* Implemented */
+  --status-missing: #F43F5E; /* Missing */
+  --status-partial: #F59E0B; /* Partially Done */
+
+  /* Text */
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 0;
+}

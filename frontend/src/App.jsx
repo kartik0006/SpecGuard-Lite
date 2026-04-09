@@ -1,20 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './components/LandingPage/LandingPage';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Temporary placeholders so your app doesn't crash when clicking Navbar links.
-// You will replace these with real components (e.g., import Login from './components/Login/Login')
-const LoginPlaceholder = () => (
-  <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <h1 style={{ color: 'var(--action-primary)' }}>Login Page (Building Next)</h1>
-  </div>
-);
-
-const SignupPlaceholder = () => (
-  <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <h1 style={{ color: 'var(--status-success)' }}>Signup Page (Building Next)</h1>
-  </div>
-);
+import LandingPage from "./components/LandingPage/LandingPage";
+import Login from "./components/Login/Login";
+import Signup from "./components/Signup/Signup";
+import Dashboard from "./components/Dashboard/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -24,11 +15,18 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         
         {/* Auth Routes */}
-        <Route path="/login" element={<LoginPlaceholder />} />
-        <Route path="/signup" element={<SignupPlaceholder />} />
-        
-        {/* Future Route: The actual AI Audit Dashboard */}
-        {/* <Route path="/audit" element={<AuditDashboard />} /> */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* AI Audit Dashboard (Protected Route) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

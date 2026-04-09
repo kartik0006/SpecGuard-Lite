@@ -1,0 +1,154 @@
+.how-it-works {
+  padding: 5rem 5%;
+  background-color: var(--bg-card);
+  text-align: center;
+  overflow-x: hidden; /* Prevents horizontal scrollbar during slide animations */
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  color: var(--text-primary);
+}
+
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .steps-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch; /* FIX: Forces all cards to be the exact same height */
+  }
+}
+
+.step-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  padding: 2rem;
+  border-radius: 12px;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  will-change: transform, opacity, box-shadow;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Forces the paragraph to take up remaining space so boxes stay uniform */
+.step-card p {
+  color: var(--text-secondary);
+  flex-grow: 1; 
+  margin: 0;
+}
+
+.step-card h3 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+/* Hover Effects */
+.step-card:hover {
+  transform: translateY(-8px) scale(1.02); /* Lift and slight scale */
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: var(--action-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 0 auto 1rem;
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover .step-number {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* --- Slide Animations --- */
+.slide-left {
+  animation: slideFromLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+.fade-up {
+  transform: translateY(30px);
+  animation: stepFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+.slide-right {
+  animation: slideFromRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes slideFromLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes stepFadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideFromRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Connectors */
+.step-connector {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .step-connector {
+    display: block;
+    width: 50px;
+    height: 2px;
+    background: var(--text-secondary);
+    opacity: 0.3;
+    margin-top: 4rem; /* Aligns line visually with the middle of the cards */
+  }
+}
+
+/* Bonus Feature Bubble */
+.bonus-feature {
+  margin-top: 4rem;
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--status-success);
+  border-radius: 30px;
+  color: var(--status-success);
+  animation: pulseGlowSuccess 2s infinite;
+  transition: transform 0.3s ease;
+}
+
+.bonus-feature:hover {
+  transform: scale(1.05);
+}
+
+@keyframes pulseGlowSuccess {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}

@@ -1,0 +1,65 @@
+.contact {
+  padding: 5rem 5%;
+  background-color: var(--bg-main);
+  display: flex;
+  justify-content: center;
+}
+
+.contact-container {
+  background-color: var(--bg-card);
+  padding: 3rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.contact-container h2 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.contact-container p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  background-color: var(--bg-main);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--action-primary);
+}
+
+.btn-submit {
+  background-color: var(--action-primary);
+  color: var(--text-primary);
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+  transform: scale(1.02);
+  background-color: #2563EB; /* Slightly darker blue */
+}

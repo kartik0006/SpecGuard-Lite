@@ -10,7 +10,7 @@ const Hero = () => {
           <span className="typewriter-text">Your Requirements</span>
         </h1>
         <h2 className="hero-subtitle fade-up delay-1">
-          AI-powered PRD vs Code verification for hackathon winners
+          AI-powered PRD vs Code verification
         </h2>
         <p className="hero-description fade-up delay-2">
           Paste your PRD and code. Get instant audit of what's implemented, 

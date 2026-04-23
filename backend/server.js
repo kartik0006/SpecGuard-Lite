@@ -11,8 +11,9 @@ const PORT = process.env.PORT || 5001;
 app.use(express.json());
 
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST"]
+  origin: [process.env.FRONTEND_URL, "http://localhost:5173"], 
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true
 }));
 
 app.get("/", (req, res) => {

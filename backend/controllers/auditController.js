@@ -1,10 +1,12 @@
-import fetch from "node-fetch"; // remove if Node >= 18
+import fetch from "node-fetch";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 export const analyzeCode = async (req, res) => {
   try {
+    console.log("ENV KEY:", process.env.OPENROUTER_API_KEY);
+
     const { prd, code } = req.body;
 
     if (!prd || !code) {
@@ -13,23 +15,22 @@ export const analyzeCode = async (req, res) => {
       });
     }
 
-    // 🔥 STRONG PROMPT (UPGRADED)
+    // ❗ STOP if key missing
+    if (!process.env.OPENROUTER_API_KEY) {
+      return res.status(500).json({
+        error: "API key not found"
+      });
+    }
+
     const prompt = `
 You are a STRICT AI Code Auditor.
 
 Compare the PRD and the Code VERY carefully.
 
-Rules:
-- If feature fully exists → implemented
-- If partially exists → partial (with reason)
-- If not present at all → missing
-- DO NOT skip any feature
-- Be accurate and strict
-
-Return ONLY valid JSON (no explanation, no markdown):
+Return ONLY valid JSON:
 
 {
-  "coverage": number (0-100),
+  "coverage": number,
   "implemented": [],
   "partial": [],
   "missing": []
@@ -46,32 +47,50 @@ ${code}
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost:5173",
+        "X-Title": "SpecGuard Lite"
       },
       body: JSON.stringify({
-        model: "openrouter/auto",
-        route: "fallback",
+        model: "openai/gpt-3.5-turbo",
         messages: [
           { role: "user", content: prompt }
         ]
       })
     });
 
-    const data = await response.json();
+    // ❗ HANDLE API ERROR
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("API ERROR:", errText);
 
-  console.log("FULL TEXT:", data.choices[0].message.content); 
-
-    // ✅ SAFE CHECK
-    if (!data.choices || data.choices.length === 0) {
       return res.status(500).json({
-        error: "AI failed",
+        error: "API request failed",
+        details: errText
+      });
+    }
+
+    const data = await response.json();
+    console.log("FULL RESPONSE:", data);
+
+    // ❗ SAFE CHECK (NO MORE CRASH)
+    if (!data || !data.choices || data.choices.length === 0) {
+      return res.status(500).json({
+        error: "Invalid AI response",
         full: data
       });
     }
 
-    const text = data.choices[0].message.content;
+    const text = data.choices[0]?.message?.content;
 
-    // 🔥 CLEAN RESPONSE
+    if (!text) {
+      return res.status(500).json({
+        error: "Empty AI response",
+        full: data
+      });
+    }
+
+    // CLEAN JSON
     const cleaned = text
       .replace(/```json/g, "")
       .replace(/```/g, "")
@@ -90,19 +109,17 @@ ${code}
       });
     }
 
-    // ✅ EXTRA SAFETY (ensure fields exist)
-    const finalResult = {
+    return res.json({
       coverage: parsed.coverage || 0,
-      implemented: parsed.implemented || [],
-      partial: parsed.partial || [],
-      missing: parsed.missing || []
-    };
-
-    res.json(finalResult);
+      implemented: Array.isArray(parsed.implemented) ? parsed.implemented : [],
+      partial: Array.isArray(parsed.partial) ? parsed.partial : [],
+      missing: Array.isArray(parsed.missing) ? parsed.missing : []
+    });
 
   } catch (error) {
     console.error("FINAL ERROR:", error);
-    res.status(500).json({
+
+    return res.status(500).json({
       error: "Server failed"
     });
   }

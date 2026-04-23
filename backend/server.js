@@ -1,7 +1,7 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import auditRoutes from './routes/auditRoutes.js'; // <-- ADD THIS IMPORT
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import auditRoutes from "./routes/auditRoutes.js";
 
 dotenv.config();
 
@@ -11,20 +11,17 @@ const PORT = process.env.PORT || 5001;
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  methods: ['GET', 'POST'],
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST"],
   credentials: true
 }));
 
-// --- ROUTES ---
-app.get('/', (req, res) => {
-  res.status(200).json({ status: 'success', message: 'Backend is live!' });
+app.get("/", (req, res) => {
+  res.json({ message: "Backend working" });
 });
 
-// Hook up the AI Audit route! <-- ADD THIS LINE
-app.use('/api/audit', auditRoutes); 
+app.use("/api/audit", auditRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
-

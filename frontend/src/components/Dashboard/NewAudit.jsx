@@ -16,7 +16,6 @@ const NewAudit = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  // ✅ NEW STATES
   const [prd, setPrd] = useState("");
   const [code, setCode] = useState("");
   const [result, setResult] = useState(null);
@@ -26,16 +25,16 @@ const NewAudit = () => {
     setTimeout(() => signOut(auth), 100);
   };
 
-  // ✅ REAL BACKEND CALL
   const handleAnalyze = async (e) => {
     e.preventDefault();
-
     console.log("CLICKED");
-
     setIsAnalyzing(true);
 
+    // Dynamically picks the Vercel env variable or defaults to localhost
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
     try {
-      const res = await fetch("http://localhost:5001/api/audit", {
+      const res = await fetch(`${API_URL}/api/audit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -47,9 +46,7 @@ const NewAudit = () => {
       });
 
       const data = await res.json();
-
       console.log("RESULT:", data);
-
       setResult(data);
 
     } catch (err) {
@@ -61,7 +58,6 @@ const NewAudit = () => {
 
   return (
     <div className="dashboard-container">
-      {/* TOP NAV */}
       <nav className="dashboard-top-navbar">
         <Link to="/" className="navbar-logo-container" style={{ textDecoration: 'none' }}>
           <LogoIcon />
@@ -71,8 +67,6 @@ const NewAudit = () => {
       </nav>
 
       <div className="dashboard-body">
-
-        {/* SIDEBAR */}
         <aside className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
           <nav className="sidebar-nav">
             <Link to="/dashboard" className="nav-item">
@@ -96,16 +90,12 @@ const NewAudit = () => {
           </button>
         </aside>
 
-        {/* MAIN */}
         <main className="dashboard-main">
           <div className="dashboard-content">
-
             <div className="quick-audit" style={{ minHeight: '600px' }}>
               <h2>Run a New AI Audit</h2>
 
               <form onSubmit={handleAnalyze} className="audit-form">
-
-                {/* PRD */}
                 <div className="textarea-wrapper">
                   <label>Product Requirements (PRD)</label>
                   <textarea
@@ -117,7 +107,6 @@ const NewAudit = () => {
                   />
                 </div>
 
-                {/* CODE */}
                 <div className="textarea-wrapper">
                   <label>Source Code</label>
                   <textarea
@@ -129,7 +118,6 @@ const NewAudit = () => {
                   />
                 </div>
 
-                {/* BUTTON */}
                 <button
                   type="submit"
                   className={`analyze-btn ${isAnalyzing ? 'loading' : ''}`}
@@ -137,10 +125,8 @@ const NewAudit = () => {
                 >
                   {isAnalyzing ? "Analyzing..." : "Run AI Audit 🚀"}
                 </button>
-
               </form>
 
-              {/* ✅ RESULT SECTION */}
               {result && (
                 <div style={{ marginTop: "2rem" }}>
                   <h3>Coverage: {result.coverage}%</h3>
@@ -161,12 +147,9 @@ const NewAudit = () => {
                   ))}
                 </div>
               )}
-
             </div>
-
           </div>
         </main>
-
       </div>
     </div>
   );
